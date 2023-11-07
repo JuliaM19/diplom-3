@@ -3,6 +3,7 @@ package ya.practicum;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import ya.practicum.api.StellarBurgersApi;
+import ya.practicum.model.AuthorizationRequest;
 import ya.practicum.model.UserRequest;
 import ya.practicum.pageobject.LoginPage;
 import ya.practicum.pageobject.MainPage;
@@ -18,8 +19,6 @@ public class RegistrationTest {
     private MainPage mainPage;
     private LoginPage loginPage;
     private RegisterPage registerPage;
-    private String accessToken;
-
     @Before
     public void setUp() {
         WebDriver webDriver = driverRule.getWebDriver();
@@ -29,9 +28,7 @@ public class RegistrationTest {
         registerPage = new RegisterPage(webDriver);
 
         api = new StellarBurgersApi();
-        userRequest = Utils.createRandomUser();
-        accessToken = api.createUser(userRequest);
-    }
+        userRequest = Utils.createRandomUser();}
 
     @Test
     public void testSuccessfulRegistration() {
@@ -57,6 +54,7 @@ public class RegistrationTest {
 
     @Test
     public void testRegistrationWithInvalidPassword() {
+        api.createUser(userRequest);
         mainPage.open();
         mainPage.waitForLoad();
         mainPage.clickEnterAccountButton();
@@ -76,6 +74,10 @@ public class RegistrationTest {
 
     @After
     public void tearDown() {
+        AuthorizationRequest authorizationRequest = new AuthorizationRequest(
+                userRequest.getEmail(),
+                userRequest.getPassword());
+        String accessToken = api.loginUser(authorizationRequest);
         api.deleteUser(accessToken);
     }
 }
