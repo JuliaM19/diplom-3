@@ -3,7 +3,6 @@ package ya.practicum;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import ya.practicum.api.StellarBurgersApi;
-import ya.practicum.model.AuthorizationRequest;
 import ya.practicum.model.UserRequest;
 import ya.practicum.pageobject.ForgotPasswordPage;
 import ya.practicum.pageobject.LoginPage;
@@ -20,6 +19,7 @@ public class LoginTest {
     private MainPage mainPage;
     private RegisterPage registerPage;
     private ForgotPasswordPage forgotPasswordPage;
+    private String accessToken;
 
     @Before
     public void setUp() {
@@ -30,12 +30,11 @@ public class LoginTest {
         mainPage = new MainPage(webDriver);
         registerPage = new RegisterPage(webDriver);
         forgotPasswordPage = new ForgotPasswordPage(webDriver);
+        accessToken = api.createUser(userRequest);
     }
 
     @Test
     public void testLoginByEnterAccountButton() {
-        api.createUser(userRequest);
-
         mainPage.open();
         mainPage.waitForLoad();
         mainPage.clickEnterAccountButton();
@@ -49,8 +48,6 @@ public class LoginTest {
 
     @Test
     public void testLoginByProfileLink() {
-        api.createUser(userRequest);
-
         mainPage.open();
         mainPage.waitForLoad();
         mainPage.clickEnterProfileLink();
@@ -64,8 +61,6 @@ public class LoginTest {
 
     @Test
     public void testLoginOnRegistrationPage() {
-        api.createUser(userRequest);
-
         mainPage.open();
         mainPage.waitForLoad();
         mainPage.clickEnterAccountButton();
@@ -83,8 +78,6 @@ public class LoginTest {
 
     @Test
     public void testLoginOnPasswordRecoveryPage() {
-        api.createUser(userRequest);
-
         mainPage.open();
         mainPage.waitForLoad();
         mainPage.clickEnterAccountButton();
@@ -102,8 +95,6 @@ public class LoginTest {
 
     @After
     public void tearDown() {
-        AuthorizationRequest authorizationRequest = Utils.createAuthorizationRequest(userRequest);
-        String accessToken = api.loginUser(authorizationRequest);
         api.deleteUser(accessToken);
     }
 }

@@ -1,6 +1,5 @@
 package ya.practicum;
 
-import ya.practicum.model.AuthorizationRequest;
 import ya.practicum.model.UserRequest;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
@@ -27,9 +26,4 @@ public final class Utils {
                 randomPassword(6)
         );
     }
-
-    public static AuthorizationRequest createAuthorizationRequest(UserRequest userRequest) {
-        return new AuthorizationRequest(userRequest.getEmail(), userRequest.getPassword());
-    }
-
 }

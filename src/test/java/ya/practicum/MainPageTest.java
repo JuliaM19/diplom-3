@@ -25,7 +25,7 @@ public class MainPageTest {
         mainPage.waitForLoad();
 
         mainPage.clickSauceButton();
-        Assert.assertTrue("Sauce selection button is not working", mainPage.isSauceHeaderVisible());
+        Assert.assertTrue("Sauce selection button is not working", mainPage.isSauceSectionSelected());
     }
 
     @Test
@@ -35,7 +35,7 @@ public class MainPageTest {
 
         mainPage.clickSauceButton();
         mainPage.clickBunButton();
-        Assert.assertTrue("Bun selection button is not working", mainPage.isBunHeaderVisible());
+        Assert.assertTrue("Bun selection button is not working", mainPage.isBunSectionSelected());
     }
 
     @Test
@@ -44,6 +44,6 @@ public class MainPageTest {
         mainPage.waitForLoad();
 
         mainPage.clickFillingButton();
-        Assert.assertTrue("Filling selection button is not working", mainPage.isFillingHeaderVisible());
+        Assert.assertTrue("Filling selection button is not working", mainPage.isFillingSectionSelected());
     }
 }

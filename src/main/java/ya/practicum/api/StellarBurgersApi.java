@@ -5,7 +5,6 @@ import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import ya.practicum.Paths;
-import ya.practicum.model.AuthorizationRequest;
 import ya.practicum.model.UserRequest;
 
 import static io.restassured.RestAssured.given;
@@ -22,21 +21,13 @@ public class StellarBurgersApi {
     }
 
     @Step("Создание пользователя")
-    public void createUser(UserRequest userRequest) {
-        given()
+    public String createUser(UserRequest userRequest) {
+        Response response = given()
                 .header(contentTypeHeader)
                 .body(userRequest)
                 .when()
                 .post(Paths.CREATE_USER_PATH);
-    }
 
-    @Step("Авторизация пользователя")
-    public String loginUser(AuthorizationRequest authorizationRequest) {
-        Response response = given()
-                .header(contentTypeHeader)
-                .body(authorizationRequest)
-                .when()
-                .post(Paths.LOGIN_USER_PATH);
         return response.getBody().jsonPath().getString("accessToken");
     }
 

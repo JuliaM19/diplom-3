@@ -3,7 +3,6 @@ package ya.practicum;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import ya.practicum.api.StellarBurgersApi;
-import ya.practicum.model.AuthorizationRequest;
 import ya.practicum.model.UserRequest;
 import ya.practicum.pageobject.LoginPage;
 import ya.practicum.pageobject.MainPage;
@@ -18,6 +17,7 @@ public class ProfilePageTest {
     private ProfilePage profilePage;
     private StellarBurgersApi api;
     private UserRequest userRequest;
+    private String accessToken;
 
     @Before
     public void setUp() {
@@ -27,6 +27,7 @@ public class ProfilePageTest {
         profilePage = new ProfilePage(webDriver);
         api = new StellarBurgersApi();
         userRequest = Utils.createRandomUser();
+        accessToken = api.createUser(userRequest);
     }
 
     @Test
@@ -65,8 +66,6 @@ public class ProfilePageTest {
 
     @Test
     public void testLogoutButton() {
-        api.createUser(userRequest);
-
         mainPage.open();
         mainPage.waitForLoad();
         mainPage.clickEnterAccountButton();
@@ -85,8 +84,6 @@ public class ProfilePageTest {
 
     @After
     public void tearDown() {
-        AuthorizationRequest authorizationRequest = Utils.createAuthorizationRequest(userRequest);
-        String accessToken = api.loginUser(authorizationRequest);
         api.deleteUser(accessToken);
     }
 }

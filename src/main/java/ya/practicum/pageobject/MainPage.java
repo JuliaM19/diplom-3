@@ -2,6 +2,7 @@ package ya.practicum.pageobject;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import ya.practicum.Paths;
 
 public class MainPage extends Page {
@@ -13,10 +14,8 @@ public class MainPage extends Page {
     private final By sauceButton = By.xpath("//span[text() = 'Соусы']");
     private final By bunButton = By.xpath("//span[text() = 'Булки']");
     private final By fillingButton = By.xpath("//span[text() = 'Начинки']");
-
-    private final By bunHeader = By.xpath("//h2[text() = 'Булки']");
-    private final By sauceHeader = By.xpath("//h2[text() = 'Соусы']");
-    private final By fillingHeader = By.xpath("//h2[text() = 'Начинки']");
+    private final By currentSection = By.className("tab_tab_type_current__2BEPc");
+    private final By childSpanNode = By.tagName("span");
 
     public MainPage(WebDriver webDriver) {
         super(webDriver);
@@ -59,15 +58,24 @@ public class MainPage extends Page {
         webDriver.findElement(sauceButton).click();
     }
 
-    public boolean isSauceHeaderVisible() {
-        return webDriver.findElement(sauceHeader).isDisplayed();
+    public boolean isSauceSectionSelected() {
+        return isCorrectSectionSelected(sauceButton);
     }
 
-    public boolean isBunHeaderVisible() {
-        return webDriver.findElement(bunHeader).isDisplayed();
+    public boolean isBunSectionSelected() {
+        return isCorrectSectionSelected(bunButton);
     }
 
-    public boolean isFillingHeaderVisible() {
-        return webDriver.findElement(fillingHeader).isDisplayed();
+    public boolean isFillingSectionSelected() {
+        return isCorrectSectionSelected(fillingButton);
+    }
+
+    private boolean isCorrectSectionSelected(By currentButtonLocator) {
+        //Ищем текущий выбранный раздел (по наличию tab_tab_type_current__2BEPc в className)
+        WebElement currentSectionElement = webDriver.findElement(this.currentSection);
+        // Ищем нужную кнопку (которую нажали)
+        WebElement currentButton = webDriver.findElement(currentButtonLocator);
+        //Берем потомка раздела по имени тега (<span>text</span>) и сравниваем текст искомой кнопки с этим потомком
+        return currentButton.getText().equals(currentSectionElement.findElement(childSpanNode).getText());
     }
 }
